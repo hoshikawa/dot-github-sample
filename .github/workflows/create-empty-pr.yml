@@ -16,6 +16,7 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
+      - run: echo "CURRENT_DATE=$(date +'%Y%m')" >> "$GITHUB_ENV"
       - name: Create PR
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -27,4 +28,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          DATE: ${{ inputs.date && inputs.date || (date +'%Y%m') }}
+          DATE: ${{ inputs.date && inputs.date || env.CURRENT_DATE }}
