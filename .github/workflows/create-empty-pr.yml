@@ -1,6 +1,11 @@
 name: create an empty PR
 on:
   workflow_dispatch: 
+    inputs:
+      date:
+        description: date(`YYYYMM`)
+        type: string
+        required: false
 
 jobs:
   create_pr:
@@ -10,16 +15,16 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Create PR
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git checkout -b test
-          git commit --allow-empty -m "Put PR title here"
-          git push --set-upstream origin test
+          git checkout -b add-files-$DATE
+          git commit --allow-empty -m "$DATE"
+          git push --set-upstream origin add-files-$DATE
           gh pr create --fill
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
+          DATE: ${{ inputs.date != '' && inputs.date || $(date +'%Y%m') }}
