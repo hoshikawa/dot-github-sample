@@ -27,4 +27,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          DATE: ${{ inputs.date != '' && inputs.date || $(date +'%Y%m') }}
+          DATE: ${{ inputs.date != '' && inputs.date || date +'%Y%m' }}
