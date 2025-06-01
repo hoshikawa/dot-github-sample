@@ -13,6 +13,10 @@ on:
           - '["1","3"]'
           - '["1","2","3"]'
         required: true
+      date:
+        description: date
+        type: string
+        required: false
 
 jobs:
   create_pr:
@@ -24,9 +28,11 @@ jobs:
     strategy:
       matrix:
         type: ${{ fromJSON(inputs.type) }}
+        include:
+          - date: ${{ inputs.date || $(date +'%Y%m') }}
     steps:
       - uses: actions/checkout@v4
-      - run: echo "CURRENT_DATE=$(date +'%Y%m')" >> "$GITHUB_ENV"
+      # - run: echo "CURRENT_DATE=$(date +'%Y%m')" >> "$GITHUB_ENV"
       - name: Create PR
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -39,4 +45,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           TYPE: ${{ matrix.type }}
-          DATE: ${{ inputs.date && inputs.date || env.CURRENT_DATE }}
+          # DATE: ${{ inputs.date && inputs.date || env.CURRENT_DATE }}
+          DATE: ${{ matrix.date }}
