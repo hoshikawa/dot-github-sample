@@ -6,4 +6,6 @@ jobs:
   echo:
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ join(fromJson(github.event.client_payload.arrays_of_object), ',') }}
+      - name: Echo key-value pairs
+        run: |
+          echo '${{ toJson(github.event.client_payload.arrays_of_object) }}' | jq -r '.[] | to_entries[] | "\(.key): \(.value)"' | paste -sd', ' -
