@@ -7,5 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - env:
+          JSON: ${{ fromJson(github.event.client_payload.arrays_of_object) }}
           MESSAGE: ${{ join(fromJson(github.event.client_payload.arrays_of_object), ',') }}
         run: echo $MESSAGE
